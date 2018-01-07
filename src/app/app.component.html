@@ -1,0 +1,31 @@
+
+<div style="position: fixed; height: 4em; padding: 1em">
+  <input id="file" type="file" (change)="fileChanged($event)">
+  <button (click)="reload()">Odśwież</button>
+</div>
+
+<div style="position: absolute;top: 4em;overflow: auto;height: 90vh; width: 95vw">
+  <div *ngFor="let cat of categories">
+    <div style="padding: 1em 0;
+      font-weight: bold;
+      font-size: 1.2em;">{{cat.label}}
+    </div>
+    <table style="border-collapse: collapse;">
+      <tr *ngFor="let row of lists[cat.name]; let i = index" style="border-collapse: collapse;" >
+        <td style="border-collapse: collapse; border: 1px solid black">{{i}}</td>
+        <td *ngFor="let column of row, let pos = index; let last = last" style="border: 1px solid black; border-collapse: collapse;">
+          {{column}}
+          <select *ngIf="last" [(ngModel)]="row[row.length-1]">
+            <option *ngFor="let c of categories" [ngValue]="c.label">{{c.label}}</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td>Index</td>
+        <td><input [(ngModel)]="newRow.price"/></td>
+        <td><input [(ngModel)]="newRow.description"/></td>
+      </tr>
+    </table>
+    <button (click)="addRow(lists[cat.name],newRow)">Dodaj Wiersz</button>
+  </div>
+</div>
