@@ -1,31 +1,17 @@
 
-<div style="position: fixed; height: 4em; padding: 1em">
-  <input id="file" type="file" (change)="fileChanged($event)">
-  <button (click)="reload()">Odśwież</button>
-</div>
+<div class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding: 0 2em;position: fixed; height: 4em; width:100%; left: 0; box-shadow:0 0 20px 2px rgba(0,0,0,0.5)">
+      <a class="navbar-brand mb-0 h1" href="#">
+        <img src="/assets/icons/chart.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Rozliczenie 
+      </a>
+      <nav class="nav">
+        <a class="nav-link active" routerLink="/newFile">Nowy plik</a>
+        <a class="nav-link" routerLink="/history">Historia</a>
+        <a class="nav-link" routerLink="/category">Kategorie</a>
+      </nav>
+  </nav>
 
-<div style="position: absolute;top: 4em;overflow: auto;height: 90vh; width: 95vw">
-  <div *ngFor="let cat of categories">
-    <div style="padding: 1em 0;
-      font-weight: bold;
-      font-size: 1.2em;">{{cat.label}}
-    </div>
-    <table style="border-collapse: collapse;">
-      <tr *ngFor="let row of lists[cat.name]; let i = index" style="border-collapse: collapse;" >
-        <td style="border-collapse: collapse; border: 1px solid black">{{i}}</td>
-        <td *ngFor="let column of row, let pos = index; let last = last" style="border: 1px solid black; border-collapse: collapse;">
-          {{column}}
-          <select *ngIf="last" [(ngModel)]="row[row.length-1]">
-            <option *ngFor="let c of categories" [ngValue]="c.label">{{c.label}}</option>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>Index</td>
-        <td><input [(ngModel)]="newRow.price"/></td>
-        <td><input [(ngModel)]="newRow.description"/></td>
-      </tr>
-    </table>
-    <button (click)="addRow(lists[cat.name],newRow)">Dodaj Wiersz</button>
-  </div>
+  
 </div>
+<router-outlet></router-outlet>

@@ -1,0 +1,28 @@
+<div style=" padding: 0 2em;position: absolute;top: 4em;overflow: auto;height: 90vh; width:100%; left:0;">
+    <div style="display:flex; justify-content:flex-end; padding: 1em;">
+        <button class="btn btn-primary" (click)="reload()">Odśwież</button>
+        <button class="btn btn-primary">Zapisz</button>
+        <button class="btn btn-primary">Export</button>
+    </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th *ngFor="let header of displayHistoryHeaders">{{header}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of historyData; let i = index" >
+            <td>{{i}}</td>
+            <td>{{row.bank}}</td>
+            <td>{{row.date}}</td>
+            <td>{{row.description}}</td>
+            <td>{{row.amount}}</td>
+            <td>{{row.category}}</td>
+          </tr>
+        
+      </tbody>
+      </table>
+
+  </div>

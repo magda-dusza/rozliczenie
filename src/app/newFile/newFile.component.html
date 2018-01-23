@@ -1,0 +1,49 @@
+<div style=" padding: 0 2em;position: absolute;top: 4em;overflow: auto;height: 90vh; width:100%; left:0;">
+    <div style="display:flex; justify-content:flex-end; padding: 1em;">
+        <label for="file-upload" class="custom-file-upload">
+            <i class="glyphicon glyphicon-cloud-upload"></i> Wczytaj plik
+        </label>
+        <input class="btn btn-secondary" id="file-upload" type="file" (change)="fileChanged($event)"/>
+        <button class="btn btn-primary" (click)="reload()">Odśwież</button>
+        <button class="btn btn-primary">Zapisz</button>
+        <button class="btn btn-primary">Export</button>
+    </div>
+    <div><strong>Aktualny plik:</strong> <i>{{file.name}}</i></div>
+
+
+    <div *ngFor="let cat of categories">
+      <div style="padding: 1em 0;
+        font-weight: bold;
+        font-size: 1.2em;">{{cat.label}}
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th *ngFor="let header of displayHeaders">{{header}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of lists[cat.name]; let i = index" >
+            <td>{{i}}</td>
+            <td *ngFor="let column of row, let pos = index; let last = last" >
+              <span *ngIf="!last">{{column}}</span>
+              <select *ngIf="last" [(ngModel)]="row[row.length-1]">
+                <option *ngFor="let c of categories" [ngValue]="c.label">{{c.label}}</option>
+              </select>
+            </td>
+          </tr>
+          <tr *ngIf="displayRow">
+            <td>Index</td>
+            <td><input [(ngModel)]="newRow.bank"/></td>
+            <td><input [(ngModel)]="newRow.date"/></td>
+            <td><input [(ngModel)]="newRow.desc"/></td>
+            <td><input [(ngModel)]="newRow.amount"/></td>
+            <td><input [(ngModel)]="newRow.category"/></td>
+          </tr>
+      </tbody>
+      </table>
+      <button (click)="displayRow = true;">Dodaj Wiersz</button>
+      <button *ngIf="displayRow" (click)="addRow(lists[cat.name],newRow);">Zapisz</button>
+    </div>
+  </div>
