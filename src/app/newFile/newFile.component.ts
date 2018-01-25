@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { saveAs } from 'file-saver/FileSaver';
 
 import {CategoryDialogComponent} from '../category-dialog/category-dialog.component';
 
@@ -17,10 +18,14 @@ export class NewFileComponent {
   file: any = {name: 'Brak'};
   headers = [,'Id', 'Numer rachunku', 'Data transakcji', 'Rodzaj transakcji', 'Nr konta', 'Odbiorca', 'Opis', 'Kwota', 'Bank', 'Kategoria'];
   displayHeaders = ['Bank', 'Data transakcji', 'Opis', 'Kwota', 'Kategoria'];
-  
+  message:any;
+  errorMessage:any;
+  fileName = '';
   
   fileChanged($event):void {
 		this.file = (<HTMLInputElement>document.getElementById("file-upload")).files[0];
+    this.fileName += this.fileName ? ' , ': '';
+    this.fileName += this.file.name;
 
 		var fileReader = new FileReader();
 		fileReader.readAsText(this.file, 'windows-1250');
@@ -40,7 +45,7 @@ export class NewFileComponent {
 
   openDialog(category){
     console.log('open dialog', category);
-    this.dialogRef = this.dialog.open(CategoryDialogComponent);
+    this.dialogRef = this.dialog.open(CategoryDialogComponent, {width: '40em', height: '35em'});
 
     this.dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
@@ -167,11 +172,31 @@ export class NewFileComponent {
             category: elem[4]
           }
           this.http.post("http://localhost:3000/actions", model).subscribe(
-            (val) => { console.log("POST call successful value returned in body", val); },
-            response => {console.log("POST call in error", response); },
+            (val) => { this.message = 'Sukces! Transakcje zotały zapisane. Możesz je objerzeć w historii' },
+            response => {this.errorMessage = "BLAD!!! Cos poszło nie tak" },
             () => { console.log("The POST observable is now completed."); });
         });
       }
     }
+  }
+
+  export() {
+    let text = this.prepareText();
+    var blob = new Blob([text], {type: "text/plain;charset=utf-8"});
+    saveAs(blob, "rozlicznie.csv");
+  }
+
+  prepareText() {
+    let firstLine = this.displayHeaders.join(',');
+    let row = [];
+    for(let i=0;i<this.categories.length;i++){
+      if(this.lists[this.categories[i].name].length > 0){
+        this.lists[this.categories[i].name].forEach((elem)=>{
+          row.push(elem.join(','))
+        });
+      }
+    }
+    let data = row.join('\n');
+    return firstLine.concat('\n', data);
   }
 }

@@ -9,31 +9,58 @@ import { HttpClient } from '@angular/common/http';
 export class CategoryDialogComponent {
   constructor(private http: HttpClient){}
   categories:any;
-  category:any;
-  name:String;
-  keyWords:any;
+  category = {
+    _id: '',
+    name: '',
+    keyWords: [],
+    label: ''
+  };
   newWord:any;
+  newCategoryLabel: any;
+  newModel = {
+    label: 'Nowa',
+    name: 'nowa',
+    keyWords: []
+  }
+  message:any;
+  errorMessage:any;
+
   ngOnInit(): void {
     this.http.get('http://localhost:3000/categories').subscribe(data => {
       this.categories = data;
       this.category = this.categories[0];
-      this.updateModel();
     });
-  }
-
-  updateModel() {
-    this.name = this.category.name;
-    this.keyWords = this.category.keyWords;
   }
 
   addWord() {
-    this.category.keyWords.push(this.newWord);
+    this.category.keyWords.unshift(this.newWord);
   }
 
   saveModel() {
-    this.http.put('http://localhost:3000/categories/'+this.category._id, this.category).subscribe(res => {
-      console.log(res);
-    });
+    this.http.put('http://localhost:3000/categories/'+this.category._id, this.category)
+    .subscribe(
+      res => { this.message = 'Suckes! Kategoria uaktualniona' },
+      res => { this.errorMessage = 'Blad! Coś poszło nie tak' }
+    );
+  }
+
+  createModel() {
+    let newCat = {
+      label: this.newCategoryLabel,
+      name: this.toSnakeCase(this.newCategoryLabel),
+      keyWords: this.category.keyWords 
+    }
+    this.http.post('http://localhost:3000/categories', newCat)
+    .subscribe(
+      res => { this.message = 'Suckes! Kategoria dodana' },
+      res => { this.errorMessage = 'Blad! Coś poszło nie tak' }
+    );
+  }
+
+  toSnakeCase(name) {
+    let words = name.split(' ');
+    words.forEach(word=>{word = word.toLowerCase()});
+    return words.join('_');
   }
 
 }

@@ -1,6 +1,6 @@
 <div style=" padding: 0 2em;position: absolute;top: 4em;overflow: auto;height: 90vh; width:100%; left:0;">
     <div style="display:flex; justify-content:flex-end; padding: 1em;">
-        <button class="btn btn-primary">Export</button>
+        <button class="btn btn-primary" (click)="export()">Export</button>
     </div>
     <div *ngFor="let cat of categories">
       <div style="padding: 1em 0;

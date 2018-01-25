@@ -1,3 +1,13 @@
+<div *ngIf="message" class="alert alert-success alert-dismissable">
+    <span (click)="message=''" style="cursor:pointer;" class="close" data-dismiss="alert" aria-label="close">&times;</span>
+    {{message}}
+</div>
+<div *ngIf="errorMessage" class="alert alert-danger alert-dismissable">
+    <span (click)="errorMessage=''" style="cursor:pointer;" class="close" data-dismiss="alert" aria-label="close">&times;</span>
+    {{errorMessage}}
+</div>
+
+
 <div style="position: fixed;
 top: 4em;
 display: flex;
@@ -6,13 +16,13 @@ align-items: center;
 padding: 1em;
 width: 100%;
 border-bottom: 1px solid silver;">
-  <div><strong>Aktualny plik:</strong> <i>{{file.name}}</i></div>
+  <div><strong>Aktualny plik:</strong> <i>{{fileName}}</i></div>
   <div>
-    <label for="file-upload" class="custom-file-upload"> Wczytaj plik</label>
-    <input class="btn btn-secondary" id="file-upload" type="file" (change)="fileChanged($event)"/>
-    <button class="btn btn-primary" (click)="reload()">Odśwież</button>
-    <button class="btn btn-primary" (click)="saveRecords()">Zapisz</button>
-    <button class="btn btn-primary">Export</button>
+    <label for="file-upload" class="custom-file-upload top-bar"> Wczytaj plik</label>
+    <input class="btn btn-secondary top-bar" id="file-upload" type="file" (change)="fileChanged($event)"/>
+    <button class="btn btn-primary top-bar" (click)="reload()">Odśwież</button>
+    <button class="btn btn-primary top-bar" (click)="saveRecords()">Zapisz</button>
+    <button class="btn btn-primary top-bar" (click)="export()">Export</button>
   </div>  
 </div>
 <div style=" padding: 0 2em;position: absolute;top: 8.5em;overflow: auto;height: 82vh; width:100%; left:0;">
@@ -42,16 +52,26 @@ border-bottom: 1px solid silver;">
             </td>
           </tr>
           <tr *ngIf="displayRow">
-            <td>Index</td>
-            <td><input [(ngModel)]="newRow.bank"/></td>
+            <td>Nowy</td>
+            <td>
+                <select [(ngModel)]="newRow.bank">
+                  <option>ING</option>
+                  <option>Millenium</option>
+                </select>
+            </td>
             <td><input [(ngModel)]="newRow.date"/></td>
             <td><input [(ngModel)]="newRow.desc"/></td>
             <td><input [(ngModel)]="newRow.amount"/></td>
-            <td><input [(ngModel)]="newRow.category"/></td>
+            <td>
+              <select [(ngModel)]="newRow.category">
+                <option *ngFor="let c of categories" [ngValue]="c.label">{{c.label}}</option>
+              </select>
+            </td>
           </tr>
       </tbody>
       </table>
-      <button (click)="displayRow = true;">Dodaj Wiersz</button>
-      <button *ngIf="displayRow" (click)="addRow(lists[cat.name],newRow);">Zapisz</button>
+      <button class="btn btn-primary bottom-bar" *ngIf="!displayRow" (click)="displayRow = true;">Nowy Wiersz</button>
+      <button class="btn btn-primary bottom-bar" *ngIf="displayRow" (click)="addRow(lists[cat.name],newRow);">Dodaj</button>
+      <button class="btn btn-secondary bottom-bar" *ngIf="displayRow" (click)="displayRow = false;">Anuluj</button>
     </div>
   </div>
