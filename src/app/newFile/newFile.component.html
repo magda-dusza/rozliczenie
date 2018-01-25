@@ -1,16 +1,21 @@
-<div style=" padding: 0 2em;position: absolute;top: 4em;overflow: auto;height: 90vh; width:100%; left:0;">
-    <div style="display:flex; justify-content:flex-end; padding: 1em;">
-        <label for="file-upload" class="custom-file-upload">
-            <i class="glyphicon glyphicon-cloud-upload"></i> Wczytaj plik
-        </label>
-        <input class="btn btn-secondary" id="file-upload" type="file" (change)="fileChanged($event)"/>
-        <button class="btn btn-primary" (click)="reload()">Odśwież</button>
-        <button class="btn btn-primary">Zapisz</button>
-        <button class="btn btn-primary">Export</button>
-    </div>
-    <div><strong>Aktualny plik:</strong> <i>{{file.name}}</i></div>
-
-
+<div style="position: fixed;
+top: 4em;
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 1em;
+width: 100%;
+border-bottom: 1px solid silver;">
+  <div><strong>Aktualny plik:</strong> <i>{{file.name}}</i></div>
+  <div>
+    <label for="file-upload" class="custom-file-upload"> Wczytaj plik</label>
+    <input class="btn btn-secondary" id="file-upload" type="file" (change)="fileChanged($event)"/>
+    <button class="btn btn-primary" (click)="reload()">Odśwież</button>
+    <button class="btn btn-primary" (click)="saveRecords()">Zapisz</button>
+    <button class="btn btn-primary">Export</button>
+  </div>  
+</div>
+<div style=" padding: 0 2em;position: absolute;top: 8.5em;overflow: auto;height: 82vh; width:100%; left:0;">
     <div *ngFor="let cat of categories">
       <div style="padding: 1em 0;
         font-weight: bold;

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -6,7 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./newFile.component.css']
 })
 export class NewFileComponent {
-  constructor(){
+  constructor(private http: HttpClient){
   }
 
   file: any = {name: 'Brak'};
@@ -142,5 +143,30 @@ export class NewFileComponent {
       }
     }
     return 'Pozostale';
+  }
+
+  saveRecords() : void {
+    let request = [];
+    for(let i=0;i<this.categories.length;i++){
+      if(this.lists[this.categories[i].name].length > 0){
+        this.lists[this.categories[i].name].forEach((elem)=>{
+          let number = elem[3];
+          if(elem[3].replace){
+            number = Number(elem[3].replace(/\"/g, ""));
+          }
+          let model = {
+            bank : elem[0],
+            date : elem[1],
+            description: elem[2],
+            amount: number,
+            category: elem[4]
+          }
+          this.http.post("http://localhost:3000/actions", model).subscribe(
+            (val) => { console.log("POST call successful value returned in body", val); },
+            response => {console.log("POST call in error", response); },
+            () => { console.log("The POST observable is now completed."); });
+        });
+      }
+    }
   }
 }

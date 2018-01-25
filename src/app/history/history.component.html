@@ -1,22 +1,24 @@
 <div style=" padding: 0 2em;position: absolute;top: 4em;overflow: auto;height: 90vh; width:100%; left:0;">
     <div style="display:flex; justify-content:flex-end; padding: 1em;">
-        <button class="btn btn-primary" (click)="reload()">Odśwież</button>
-        <button class="btn btn-primary">Zapisz</button>
         <button class="btn btn-primary">Export</button>
     </div>
-
+    <div *ngFor="let cat of categories">
+      <div style="padding: 1em 0;
+        font-weight: bold;
+        font-size: 1.2em;">{{cat}}
+      </div>
       <table>
         <thead>
           <tr>
             <th>Id</th>
-            <th *ngFor="let header of displayHistoryHeaders">{{header}}</th>
+            <th *ngFor="let header of displayHeaders">{{header}}</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let row of historyData; let i = index" >
+          <tr *ngFor="let row of lists[cat]; let i = index" >
             <td>{{i}}</td>
             <td>{{row.bank}}</td>
-            <td>{{row.date}}</td>
+            <td>{{row.date | date: 'yyyy-MM-dd'}}</td>
             <td>{{row.description}}</td>
             <td>{{row.amount}}</td>
             <td>{{row.category}}</td>
@@ -24,5 +26,9 @@
         
       </tbody>
       </table>
-
+      <div style="display:flex; justify-content:flex-end; font-size:1.5em; padding-top: 1em;">
+        <strong>Suma: </strong>
+        <span style="padding-left: 1em;">{{suma(cat)}}</span>
+      </div>
+    </div>
   </div>
