@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MatDialog, MatDialogRef } from '@angular/material';
+
+import {CategoryDialogComponent} from '../category-dialog/category-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -7,8 +10,9 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./newFile.component.css']
 })
 export class NewFileComponent {
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient, public dialog: MatDialog){
   }
+  dialogRef: MatDialogRef<CategoryDialogComponent>;
 
   file: any = {name: 'Brak'};
   headers = [,'Id', 'Numer rachunku', 'Data transakcji', 'Rodzaj transakcji', 'Nr konta', 'Odbiorca', 'Opis', 'Kwota', 'Bank', 'Kategoria'];
@@ -30,26 +34,27 @@ export class NewFileComponent {
     }
   }
 
-  categories = [
-    {name:'dochody', label: 'Dochody', keyWords: ['wynagrodzenie', 'naliczone odsetki', 'place', 'rozlicznie pracownika', 'Skanska', 'Sii']},
-    {name:'stale', label: 'Oplaty stale', keyWords: ['Orange', 'NETIA', 'T-Mobile', 'assistance']},
-    {name:'jedzenie', label: 'Jedzenie', keyWords: ['tesco','CUKIERNIA', 'Carrefour', 'DELIKOMAT', 'SPOLEM', 'delikatesy', 'biedronka', 'piekarnia', 'freshmarket', 'market', 'bulka z maslem', '1-minute']},
-    {name:'rozrywka', label: 'Rozrywka', keyWords: ['Stacja Grawitacja', 'kino', 'wisla', 'wspinacz','crux']},
-    {name:'restauracja', label: 'Restauracja', keyWords: ['Restauracja', 'food', 'kfc', 'kawiarnia', 'pizza','bar ', 'subway', 'pijalnie']},
-    {name:'prezenty', label: 'Prezenty', keyWords: ['groupon']},
-    {name:'kosmetyki', label: 'Kosmetyki', keyWords: ['rossman', 'hebe']},
-    {name:'domowe', label: 'Domowe', keyWords: ['leroy']},
-    {name:'ubrania', label: 'Ubrania', keyWords: ['ccc']},
-    {name:'wewnetrzne', label: 'Wewnetrzne', keyWords: ['oszczedności', 'Przelew własny']},
-    {name:'pozostale', label: 'Pozostale', keyWords: []},
-  ];
+  categories:any = [];
 
   lists = {};
 
+  openDialog(category){
+    console.log('open dialog', category);
+    this.dialogRef = this.dialog.open(CategoryDialogComponent);
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      console.log(result);
+    });
+  }
+
   ngOnInit(): void {
+    this.http.get('http://localhost:3000/categories').subscribe(data => {
+      this.categories = data;
       for(let i=0;i<this.categories.length;i++){
         this.lists[this.categories[i].name] = [];
       }
+    });
     }
 
   allData = [];

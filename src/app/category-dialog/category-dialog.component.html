@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Add file</h1>
+<mat-dialog-content>
+        <div>
+            <select [(ngModel)]="category" (change)="updateModel($event)">
+                <option *ngFor="let cat of categories"  [ngValue]="cat">{{cat.label}}</option>
+            </select>
+        </div>
+        <div style="color: gray">Ukryta nazwa : {{name}}</div>
+        <div >
+            <div>Lista słów:</div>
+            <div><input [(ngModel)]="newWord"/><button (click)="addWord()">Dodaj</button></div>
+            <div style="padding-left: 3em;" *ngFor="let word of keyWords">{{word}}</div>
+        </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="saveModel()">Zapisz</button>
+  <button mat-button (click)="cancel()">Anuluj</button>
+</mat-dialog-actions>

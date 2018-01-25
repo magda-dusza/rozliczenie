@@ -1,0 +1,11 @@
+<div style="top: 5em; position: absolute;">
+    <div *ngFor="let row of categories" style="padding: 0 0 3em 0;">
+        <strong> Kategoria: {{row.label}}</strong>
+        <div style="color: gray">Ukryta nazwa : {{row.name}}</div>
+        <div >
+            <div>Lista słów:</div>
+            <div style="padding-left: 3em;" *ngFor="let word of row.keyWords">{{word}}</div>
+        </div>
+        
+    </div>
+</div>

@@ -36,6 +36,9 @@ border-bottom: 1px solid silver;">
               <select *ngIf="last" [(ngModel)]="row[row.length-1]">
                 <option *ngFor="let c of categories" [ngValue]="c.label">{{c.label}}</option>
               </select>
+              <button *ngIf="last" class="btn" style="margin:0; padding:0;background-color:inherit;" (click)="openDialog(row[row.length-1])">
+                <img src="/assets/icons/edit2.svg" width="20" height="20" class="d-inline-block align-top" alt="">
+              </button>
             </td>
           </tr>
           <tr *ngIf="displayRow">
